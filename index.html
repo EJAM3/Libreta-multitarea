@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IDEOTAS | Bitácora Creativa</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%232c3e50%22/><text y=%22.85em%22 font-size=%2265%22 x=%2218%22>💡</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%2327ae60%22/><text y=%22.85em%22 font-size=%2260%22 x=%2220%22>✒️</text></svg>">
 
     <style>
         :root {
@@ -60,6 +60,7 @@
             box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
             margin-bottom: 20px;
             font-size: 25px;
+            color: var(--brand-color); /* Cambiado a verde */
         }
 
         .inputs-container {
@@ -116,7 +117,7 @@
         }
         .tab.active {
             box-shadow: inset 2px 2px 5px var(--shadow-dark);
-            color: var(--accent-color);
+            color: var(--brand-color); /* Activa en verde */
             padding-bottom: 18px;
         }
 
@@ -189,7 +190,7 @@
         <span id="notifText">Sincronizando...</span>
     </div>
 
-    <div class="logo-wrapper">💡</div>
+    <div class="logo-wrapper">✒️</div>
 
     <div class="inputs-container">
         <label>Título de la nota:</label>
@@ -217,7 +218,7 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdVtBlhl_kk3UlsAzXrAHcjmdBDE0RJ14ohdRzX4r4jaF8NKxtG95eYmgDVMaAoKViAQ/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxS93oZmyEmVppleqd6wvVDzJP9LKkYRcENbr_bfcxdkYRtRC8eW3J29cmB86zOiV45zQ/exec";
         
         const pageConfigs = {
             1: { id: "1OeKKTW63l3FyYN-lwqPkmpugYoz2_9rTcIqpbL7Nt4I", placeholder: "Ideas para el LIBRO..." },
@@ -237,7 +238,6 @@
         };
 
         function switchPage(pageNum) {
-            // Guardar lo que hay actualmente antes de cambiar
             pagesData[currentPage].title = document.getElementById('noteTitle').value;
             pagesData[currentPage].content = document.getElementById('noteContent').value;
             
@@ -245,8 +245,6 @@
             document.getElementById(`tab${pageNum}`).classList.add('active');
             
             currentPage = pageNum;
-            
-            // Cargar los datos de la nueva página (estarán vacíos si no se ha escrito nada)
             document.getElementById('noteTitle').value = pagesData[pageNum].title;
             document.getElementById('noteContent').value = pagesData[pageNum].content;
             document.getElementById('noteContent').placeholder = pageConfigs[pageNum].placeholder;
@@ -265,7 +263,6 @@
             const titleInput = document.getElementById('noteTitle');
             const textArea = document.getElementById('noteContent');
             const btn = document.getElementById('sendBtn');
-            
             const title = titleInput.value.trim();
             const content = textArea.value.trim();
             const docId = pageConfigs[currentPage].id;
@@ -295,12 +292,9 @@
                 });
 
                 showNotification("¡Registro completado!", "✅", "#27ae60");
-                
-                // Limpiar todo después del éxito
                 titleInput.value = "";
                 textArea.value = ""; 
                 pagesData[currentPage] = { title: "", content: "" };
-                
             } catch (error) {
                 showNotification("Error de conexión", "❌", "#e53e3e");
             } finally {
@@ -309,10 +303,7 @@
             }
         }
 
-        // Asegurarse de que el título empiece vacío al cargar
-        window.onload = () => {
-            document.getElementById('noteTitle').value = "";
-        };
+        window.onload = () => { document.getElementById('noteTitle').value = ""; };
     </script>
 </body>
 </html>
