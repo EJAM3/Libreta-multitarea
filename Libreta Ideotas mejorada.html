@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDEOTAS | Bitácora Creativa</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%232c3e50%22/><text y=%22.85em%22 font-size=%2265%22 x=%2218%22>💡</text></svg>">
+
+    <style>
+        :root {
+            --bg-color: #e0e5ec;
+            --primary-color: #2c3e50;
+            --accent-color: #f39c12;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --brand-color: #27ae60;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--primary-color);
+        }
+
+        #notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 50px;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #notification.show { top: 30px; }
+
+        .logo-wrapper {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            margin-bottom: 20px;
+            font-size: 25px;
+        }
+
+        .inputs-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .inputs-container label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-left: 10px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .inputs-container input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: none;
+            background: var(--bg-color);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+            color: var(--primary-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        #noteTitle { font-weight: bold; color: var(--accent-color); }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: -15px;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tab {
+            padding: 10px 15px;
+            border-radius: 12px 12px 0 0;
+            border: none;
+            background: var(--bg-color);
+            box-shadow: 3px -3px 6px var(--shadow-dark);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            transition: all 0.3s;
+        }
+        .tab.active {
+            box-shadow: inset 2px 2px 5px var(--shadow-dark);
+            color: var(--accent-color);
+            padding-bottom: 18px;
+        }
+
+        .glass-notebook {
+            width: 90%;
+            max-width: 600px;
+            background: var(--bg-color);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 15px 15px 40px var(--shadow-dark), -15px -15px 40px var(--shadow-light);
+        }
+
+        #noteContent {
+            width: 100%;
+            height: 200px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            resize: none;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        .controls { margin-top: 30px; text-align: center; }
+
+        button.main-btn {
+            width: 280px;
+            padding: 18px;
+            border-radius: 15px;
+            border: none;
+            background: var(--bg-color);
+            color: var(--primary-color);
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        button.main-btn:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+
+        .footer-brand {
+            margin-top: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            opacity: 0.6;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-brand span {
+            color: var(--brand-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="notification">
+        <span id="notifIcon">🚀</span>
+        <span id="notifText">Sincronizando...</span>
+    </div>
+
+    <div class="logo-wrapper">💡</div>
+
+    <div class="inputs-container">
+        <label>Título de la nota:</label>
+        <input type="text" id="noteTitle" placeholder="¿De qué trata esta idea?" value="">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchPage(1)" id="tab1">📖 Libro</button>
+        <button class="tab" onclick="switchPage(2)" id="tab2">⛪ Iglesia</button>
+        <button class="tab" onclick="switchPage(3)" id="tab3">🔥 Ideotas</button>
+        <button class="tab" onclick="switchPage(4)" id="tab4">💬 Mensajes</button>
+        <button class="tab" onclick="switchPage(5)" id="tab5">📅 Agenda</button>
+    </div>
+
+    <div class="glass-notebook">
+        <textarea id="noteContent" placeholder="Desarrolla tu idea aquí..."></textarea>
+    </div>
+
+    <div class="controls">
+        <button id="sendBtn" class="main-btn" onclick="sendToDocs()">Registrar Ideota</button>
+    </div>
+
+    <div class="footer-brand">
+        Creado por <span>Tinta Verde Editores</span> ✒️
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwdVtBlhl_kk3UlsAzXrAHcjmdBDE0RJ14ohdRzX4r4jaF8NKxtG95eYmgDVMaAoKViAQ/exec";
+        
+        const pageConfigs = {
+            1: { id: "1OeKKTW63l3FyYN-lwqPkmpugYoz2_9rTcIqpbL7Nt4I", placeholder: "Ideas para el LIBRO..." },
+            2: { id: "1uJ_1zxxrTu-qceFHf6f-7Rnf042qIyVMv5010RbkRj4", placeholder: "Notas de la IGLESIA..." },
+            3: { id: "1ghNat2soxHX7LDIU2Y3VtrOXHFUKj4Zwbwq-xZxEHWI", placeholder: "Nuevas IDEOTAS..." },
+            4: { id: "16-PTqYNukutXxuAoaiBOIFsoK9VktT3jTYzXfZfBqbI", placeholder: "Escribe tus MENSAJES..." },
+            5: { id: "1DNHY2SGmTi9Sgw-b8G4ozkhO196yk_8fOxEkvxjY7a4", placeholder: "Organiza tu AGENDA..." }
+        };
+
+        let currentPage = 1;
+        let pagesData = { 
+            1: { title: "", content: "" }, 
+            2: { title: "", content: "" }, 
+            3: { title: "", content: "" },
+            4: { title: "", content: "" },
+            5: { title: "", content: "" }
+        };
+
+        function switchPage(pageNum) {
+            // Guardar lo que hay actualmente antes de cambiar
+            pagesData[currentPage].title = document.getElementById('noteTitle').value;
+            pagesData[currentPage].content = document.getElementById('noteContent').value;
+            
+            document.getElementById(`tab${currentPage}`).classList.remove('active');
+            document.getElementById(`tab${pageNum}`).classList.add('active');
+            
+            currentPage = pageNum;
+            
+            // Cargar los datos de la nueva página (estarán vacíos si no se ha escrito nada)
+            document.getElementById('noteTitle').value = pagesData[pageNum].title;
+            document.getElementById('noteContent').value = pagesData[pageNum].content;
+            document.getElementById('noteContent').placeholder = pageConfigs[pageNum].placeholder;
+        }
+
+        function showNotification(text, icon, color) {
+            const notif = document.getElementById('notification');
+            document.getElementById('notifText').innerText = text;
+            document.getElementById('notifIcon').innerText = icon;
+            notif.style.background = color || '#2c3e50';
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3500);
+        }
+
+        async function sendToDocs() {
+            const titleInput = document.getElementById('noteTitle');
+            const textArea = document.getElementById('noteContent');
+            const btn = document.getElementById('sendBtn');
+            
+            const title = titleInput.value.trim();
+            const content = textArea.value.trim();
+            const docId = pageConfigs[currentPage].id;
+
+            if (!content) {
+                showNotification("¡Escribe algo primero!", "⚠️", "#e53e3e");
+                return;
+            }
+
+            const ahora = new Date();
+            const fechaHora = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ", " + 
+                              ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+            const finalContent = `📅 ${fechaHora}\n**${title || 'Nota rápida'}**\n${content}\n`;
+
+            btn.disabled = true;
+            btn.innerText = "Sincronizando...";
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ 
+                        content: finalContent, 
+                        documentId: docId 
+                    })
+                });
+
+                showNotification("¡Registro completado!", "✅", "#27ae60");
+                
+                // Limpiar todo después del éxito
+                titleInput.value = "";
+                textArea.value = ""; 
+                pagesData[currentPage] = { title: "", content: "" };
+                
+            } catch (error) {
+                showNotification("Error de conexión", "❌", "#e53e3e");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Registrar Ideota";
+            }
+        }
+
+        // Asegurarse de que el título empiece vacío al cargar
+        window.onload = () => {
+            document.getElementById('noteTitle').value = "";
+        };
+    </script>
+</body>
+</html>
