@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IDEOTAS | Bitácora Creativa</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%2327ae60%22/><text y=%22.85em%22 font-size=%2260%22 x=%2220%22>✒️</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%2327ae60%22/><text y=%22.85em%22 font-size=%2260%22 x=%2220%22>💡</text></svg>">
 
     <style>
         :root {
@@ -50,17 +50,16 @@
         #notification.show { top: 30px; }
 
         .logo-wrapper {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background: var(--bg-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 15px;
+            border-radius: 18px;
             box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
             margin-bottom: 20px;
-            font-size: 25px;
-            color: var(--brand-color); /* Cambiado a verde */
+            font-size: 28px;
         }
 
         .inputs-container {
@@ -117,7 +116,7 @@
         }
         .tab.active {
             box-shadow: inset 2px 2px 5px var(--shadow-dark);
-            color: var(--brand-color); /* Activa en verde */
+            color: var(--brand-color);
             padding-bottom: 18px;
         }
 
@@ -190,7 +189,7 @@
         <span id="notifText">Sincronizando...</span>
     </div>
 
-    <div class="logo-wrapper">✒️</div>
+    <div class="logo-wrapper">💡</div>
 
     <div class="inputs-container">
         <label>Título de la nota:</label>
@@ -218,7 +217,8 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxS93oZmyEmVppleqd6wvVDzJP9LKkYRcENbr_bfcxdkYRtRC8eW3J29cmB86zOiV45zQ/exec";
+        // URL ACTUALIZADA
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlNnOZ5OZUlKd0Ckd8cZaENDouK7piN5Hgedmt4981WJw-Jw_9FKlLm07aXGVO1Xqkww/exec";
         
         const pageConfigs = {
             1: { id: "1OeKKTW63l3FyYN-lwqPkmpugYoz2_9rTcIqpbL7Nt4I", placeholder: "Ideas para el LIBRO..." },
@@ -272,12 +272,6 @@
                 return;
             }
 
-            const ahora = new Date();
-            const fechaHora = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ", " + 
-                              ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-
-            const finalContent = `📅 ${fechaHora}\n**${title || 'Nota rápida'}**\n${content}\n`;
-
             btn.disabled = true;
             btn.innerText = "Sincronizando...";
 
@@ -286,7 +280,8 @@
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify({ 
-                        content: finalContent, 
+                        title: title || "Nota rápida",
+                        content: content, 
                         documentId: docId 
                     })
                 });
