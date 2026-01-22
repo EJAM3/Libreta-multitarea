@@ -1,0 +1,17 @@
+{
+  "name": "IDEOTAS Bitácora Creativa",
+  "short_name": "IDEOTAS",
+  "description": "Bitácora para registro de ideas creativas",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#e0e5ec",
+  "theme_color": "#27ae60",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1005/1005141.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

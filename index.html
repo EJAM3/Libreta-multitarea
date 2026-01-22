@@ -2,9 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>IDEOTAS | Bitácora Creativa</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#27ae60">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1005/1005141.png">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2230%22 fill=%22%2327ae60%22/><text y=%22.85em%22 font-size=%2260%22 x=%2220%22>💡</text></svg>">
 
     <style>
@@ -217,7 +220,6 @@
     </div>
 
     <script>
-        // URL ACTUALIZADA
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlNnOZ5OZUlKd0Ckd8cZaENDouK7piN5Hgedmt4981WJw-Jw_9FKlLm07aXGVO1Xqkww/exec";
         
         const pageConfigs = {
@@ -229,21 +231,13 @@
         };
 
         let currentPage = 1;
-        let pagesData = { 
-            1: { title: "", content: "" }, 
-            2: { title: "", content: "" }, 
-            3: { title: "", content: "" },
-            4: { title: "", content: "" },
-            5: { title: "", content: "" }
-        };
+        let pagesData = { 1: { title: "", content: "" }, 2: { title: "", content: "" }, 3: { title: "", content: "" }, 4: { title: "", content: "" }, 5: { title: "", content: "" } };
 
         function switchPage(pageNum) {
             pagesData[currentPage].title = document.getElementById('noteTitle').value;
             pagesData[currentPage].content = document.getElementById('noteContent').value;
-            
             document.getElementById(`tab${currentPage}`).classList.remove('active');
             document.getElementById(`tab${pageNum}`).classList.add('active');
-            
             currentPage = pageNum;
             document.getElementById('noteTitle').value = pagesData[pageNum].title;
             document.getElementById('noteContent').value = pagesData[pageNum].content;
@@ -296,6 +290,15 @@
                 btn.disabled = false;
                 btn.innerText = "Registrar Ideota";
             }
+        }
+
+        // REGISTRO DE SERVICE WORKER PARA PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('IDEOTAS PWA lista'))
+                    .catch(err => console.log('Error PWA', err));
+            });
         }
 
         window.onload = () => { document.getElementById('noteTitle').value = ""; };
